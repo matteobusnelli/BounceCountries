@@ -1,0 +1,30 @@
+.header-custom {
+    background: #215884;
+}
+
+.label-custom-style:focus {
+    border-color: rgba(224, 212, 223, 0.593) !important;
+    box-shadow: 0 0 0 0.1rem rgba(224, 212, 223, 0.593) !important;
+}
+
+.buttom-custom-style {
+    background-color: rgba(224, 212, 223, 0.593);
+    border-color: rgba(224, 212, 223, 0.593);
+    color: black;
+}
+
+.buttom-custom-style:hover,
+.buttom-custom-style:active {
+    background-color: rgba(224, 212, 223, 0.8) !important;
+    border-color: rgba(224, 212, 223, 0.8) !important;
+    color: black !important;
+}
+
+/*Loading*/
+.loader-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}

@@ -14,6 +14,20 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+app.get("/api/countryinfo/:name", async (req, res) => {
+  try {
+    const { name } = req.params;
+    const response = await fetch(
+      `https://restcountries.com/v3.1/name/${name}?fullText=true`
+    );
+    const countryData = await response.json();
+    res.json(countryData[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // Activate the server
 app.listen(port, () => {
   console.log(`Film library server listening at http://localhost:${port}`);
