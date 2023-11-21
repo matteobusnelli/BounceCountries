@@ -38,7 +38,7 @@ function HomePage() {
   };
 
   return (
-    <Container className="my-4 w-100 h-100">
+    <Container className="my-4">
       {loading ? <Loading /> : null}
       <Form onSubmit={handleSubmit}>
         <Row className="align-items-end">
