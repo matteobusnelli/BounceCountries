@@ -21,7 +21,21 @@ app.get("/api/countryinfo/:name", async (req, res) => {
       `https://restcountries.com/v3.1/name/${name}?fullText=true`
     );
     const countryData = await response.json();
-    res.json(countryData[0]);
+    if (countryData.status === 404) {
+      res.status(204).json({ error: "Country non found" });
+    } else {
+      let objToReturn = { countryData: countryData[0] };
+      if (countryData[0].borders) {
+        const codes = countryData[0].borders.join(",");
+        const borsersResponse = await fetch(
+          `https://restcountries.com/v3.1/alpha?codes=${codes}`
+        );
+        const borders = await borsersResponse.json();
+        const bordersNames = borders.map((country) => country.name.common);
+        objToReturn.bordersNames = bordersNames;
+      }
+      res.json(objToReturn);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

@@ -10,6 +10,7 @@ import {
 } from "react-bootstrap";
 import Loading from "./Loading";
 import API from "../API";
+import CountryData from "./CountryData";
 
 function HomePage() {
   const [countryName, setCountryName] = useState(undefined);
@@ -19,6 +20,7 @@ function HomePage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setCountryInfo(undefined);
     if (!countryName) setErrorMsg("Country name is required.");
     else {
       //API
@@ -26,6 +28,8 @@ function HomePage() {
       try {
         const result = await API.getCountryInfo(countryName);
         setCountryInfo(result);
+        if (result.notFound) setErrorMsg(result.notFound);
+        else setErrorMsg("");
       } catch (err) {
         console.log(err);
       }
@@ -34,7 +38,7 @@ function HomePage() {
   };
 
   return (
-    <Container className="mt-3">
+    <Container className="my-4 w-100 h-100">
       {loading ? <Loading /> : null}
       <Form onSubmit={handleSubmit}>
         <Row className="align-items-end">
@@ -68,6 +72,9 @@ function HomePage() {
           </Col>
         </Row>
       </Form>
+      {countryInfo && countryInfo.countryData && (
+        <CountryData countryInfo={countryInfo} />
+      )}
     </Container>
   );
 }

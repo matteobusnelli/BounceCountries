@@ -1,10 +1,23 @@
+body,
+html,
+#root {
+    height: 100%;
+    width: 100%;
+}
+
+#map-wrapper {
+    height: 100%;
+    width: 100%;
+    min-height: 500px;
+}
+
 .header-custom {
     background: #215884;
 }
 
 .label-custom-style:focus {
     border-color: rgba(224, 212, 223, 0.593) !important;
-    box-shadow: 0 0 0 0.1rem rgba(224, 212, 223, 0.593) !important;
+    box-shadow: 0 0 0 0.1rem rgba(0, 0, 0, 0.1) !important;
 }
 
 .buttom-custom-style {
@@ -27,4 +40,27 @@
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9999;
+}
+
+/*Country data*/
+.card-custom {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+    height: 100%;
+    width: 100%;
+}
+
+.card-custom-header {
+    background-color: #f8f9fa;
+}
+
+.card-custom-footer {
+    background-color: #f8f9fa;
+    height: 100%;
+    width: 100%;
+}
+
+.card-custom-image {
+    border-radius: 10px;
 }
