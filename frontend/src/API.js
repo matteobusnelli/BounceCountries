@@ -7,18 +7,11 @@ function getJson(httpResponsePromise) {
     httpResponsePromise
       .then((response) => {
         if (response.ok) {
-          if (response.status === 204) {
-            resolve({ notFound: "Country not found" });
-          } else {
-            response
-              .json()
-              .then((json) => resolve(json))
-              .catch((err) =>
-                reject({ error: "Cannot parse server response" })
-              );
-          }
+          response
+            .json()
+            .then((json) => resolve(json))
+            .catch((err) => reject({ error: "Cannot parse server response" }));
         } else {
-          // analyzing the cause of error
           response
             .json()
             .then((obj) => reject(obj)) // error msg in the response body

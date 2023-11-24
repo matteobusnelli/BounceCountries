@@ -21,8 +21,9 @@ app.get("/api/countryinfo/:name", async (req, res) => {
       `https://restcountries.com/v3.1/name/${name}?fullText=true`
     );
     const countryData = await response.json();
+
     if (countryData.status === 404) {
-      res.status(204).json({ error: "Country non found" });
+      res.status(404).json({ countryNotFoundError: "Country not found" });
     } else {
       let objToReturn = { countryData: countryData[0] };
       if (countryData[0].borders) {
@@ -46,3 +47,5 @@ app.get("/api/countryinfo/:name", async (req, res) => {
 app.listen(port, () => {
   console.log(`Film library server listening at http://localhost:${port}`);
 });
+
+module.exports = app;

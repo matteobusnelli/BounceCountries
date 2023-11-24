@@ -28,15 +28,17 @@ function HomePage() {
       try {
         const result = await API.getCountryInfo(countryName);
         setCountryInfo(result);
-        if (result.notFound) setErrorMsg(result.notFound);
-        else setErrorMsg("");
+        setErrorMsg("");
       } catch (err) {
-        console.log(err);
+        if (err.countryNotFoundError) {
+          setErrorMsg(err.countryNotFoundError);
+        } else {
+          console.log(err);
+        }
       }
       setLoading(false);
     }
   };
-
   return (
     <Container className="my-4">
       {loading ? <Loading /> : null}
