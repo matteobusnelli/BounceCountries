@@ -9,7 +9,7 @@ import {
   ListGroupItem,
   Row,
 } from "react-bootstrap";
-
+import { ArrowUp, ArrowDown } from "react-bootstrap-icons";
 function CountryData({ countryInfo }) {
   const [moreInfo, setMoreInfo] = useState(false);
   return (
@@ -90,8 +90,9 @@ function CountryData({ countryInfo }) {
                 className="buttom-custom-style"
                 onClick={() => setMoreInfo((oldValue) => !oldValue)}
               >
-                More Info
+                {moreInfo ? "Close more info" : "View more info"}
               </Button>
+              {moreInfo ? <ArrowDown size={25} /> : <ArrowUp size={25} />}
               {moreInfo && (
                 <Container className="mt-3">
                   <Row>

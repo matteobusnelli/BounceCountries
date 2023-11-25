@@ -61,7 +61,7 @@ function HomePage() {
           </Col>
         </Row>
         <Row className="mt-3">
-          <Col lg={6} sm={6} xs={6}>
+          <Col lg={6} sm={12} xs={12}>
             {errorMsg ? (
               <Alert
                 variant="danger"
