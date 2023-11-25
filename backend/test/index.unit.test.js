@@ -2,10 +2,26 @@
 const request = require("supertest");
 const app = require("../index");
 
-describe("Test GET /api/countryinfo/:name", () => {
-  let mockedCountry = "nonexistingcountry";
+beforeAll(() => {
+  jest.clearAllMocks();
+  jest.spyOn(console, "log").mockImplementation(() => {});
+  jest.spyOn(console, "info").mockImplementation(() => {});
+  jest.spyOn(console, "error").mockImplementation(() => {});
+});
+afterAll(() => {
+  jest.restoreAllMocks();
+});
 
-  test("T1 non-existing country name", (done) => {
+describe("Test GET /api/countryinfo/:name", () => {
+  let mockedCountry;
+  test("T1 non-existing country name (ERROR 404)", (done) => {
+    mockedCountry = "nonexistingcountry";
+    const mockedNotFound = { status: 404 };
+    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValue(mockedNotFound),
+      status: 404,
+    });
+
     request(app)
       .get(`/api/countryinfo/${mockedCountry}`)
       .then((res) => {
@@ -16,96 +32,129 @@ describe("Test GET /api/countryinfo/:name", () => {
       .catch((err) => done(err));
   });
 
-  mockedCountry = "italy";
-  test("T2 existing country name (country with boarders)", (done) => {
-    const resultMocked = {
-      /*TO-DO*/
-    };
+  test("T2 internal server error (ERROR 500)", (done) => {
+    mockedCountry = "italy";
+    jest
+      .spyOn(global, "fetch")
+      .mockImplementation(() => Promise.reject("Fake error"));
+
     request(app)
       .get(`/api/countryinfo/${mockedCountry}`)
       .then((res) => {
-        expect(res.status).toBe(200);
-        expect(res.body).toEqual(resultMocked);
+        expect(res.status).toBe(500);
+        expect(res.body).toEqual({ error: "Internal Server Error" });
         done();
       })
       .catch((err) => done(err));
   });
 
-  mockedCountry = "japan";
-  test("T3 existing country name (country without boarders)", (done) => {
-    const resultMocked = {
-      /*TO-DO*/
-    };
-    request(app)
-      .get(`/api/countryinfo/${mockedCountry}`)
-      .then((res) => {
-        expect(res.status).toBe(200);
-        expect(res.body).toEqual(resultMocked);
-        done();
-      })
-      .catch((err) => done(err));
-  });
-});
+  test("T3 successful response (country with borders) (STATUS 200)", async () => {
+    try {
+      mockedCountry = "italy";
+      const mockedCountryData = [
+        {
+          name: {
+            common: "Italy",
+            official: "Italian Republic",
+          },
+          borders: ["AUT", "FRA", "SMR", "SVN", "CHE", "VAT"],
+        },
+        {
+          otherCountryData: "other country data",
+        },
+      ];
+      const mockedCountryBorders = [
+        {
+          name: {
+            common: "San Marino",
+          },
+        },
+        {
+          name: {
+            common: "France",
+          },
+        },
+        {
+          name: {
+            common: "Vatican City",
+          },
+        },
+        {
+          name: {
+            common: "Switzerland",
+          },
+        },
+        {
+          name: {
+            common: "Austria",
+          },
+        },
+        {
+          name: {
+            common: "Slovenia",
+          },
+        },
+      ];
 
-/*
-// app.js
-const fetch = require('node-fetch');
+      jest
+        .spyOn(global, "fetch")
+        .mockResolvedValueOnce({
+          json: jest.fn().mockResolvedValue(mockedCountryData),
+          status: 200,
+        })
+        .mockResolvedValueOnce({
+          json: jest.fn().mockResolvedValue(mockedCountryBorders),
+          status: 200,
+        });
 
-app.get("/api/countryinfo/:name", async (req, res) => {
-  try {
-    const { name } = req.params;
-    const response = await fetch(
-      `https://restcountries.com/v3.1/name/${name}?fullText=true`
-    );
-    const countryData = await response.json();
+      const mockReturnObj = {
+        countryData: mockedCountryData[0],
+        bordersNames: mockedCountryBorders.map(
+          (country) => country.name.common
+        ),
+      };
 
-    if (countryData.status === 404) {
-      res.status(404).json({ countryNotFoundError: "Country not found" });
-    } else {
-      let objToReturn = { countryData: countryData[0] };
-      if (countryData[0].borders) {
-        const codes = countryData[0].borders.join(",");
-        const borsersResponse = await fetch(
-          `https://restcountries.com/v3.1/alpha?codes=${codes}`
-        );
-        const borders = await borsersResponse.json();
-        const bordersNames = borders.map((country) => country.name.common);
-        objToReturn.bordersNames = bordersNames;
-      }
-      res.json(objToReturn);
+      const response = await request(app).get(
+        `/api/countryinfo/${mockedCountry}`
+      );
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockReturnObj);
+    } catch (err) {
+      throw err;
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+  });
 
-// app.test.js
-const fetch = require('node-fetch');
-const app = require('../app');
+  test("T4 successful response (country without borders) (STATUS 200)", async () => {
+    try {
+      mockedCountry = "japan";
+      const mockedCountryData = [
+        {
+          name: {
+            common: "Japan",
+            official: "Japan",
+          },
+        },
+        {
+          otherCountryData: "other country data",
+        },
+      ];
 
-jest.mock('node-fetch');
+      jest.spyOn(global, "fetch").mockResolvedValueOnce({
+        json: jest.fn().mockResolvedValue(mockedCountryData),
+        status: 200,
+      });
 
-describe('GET /api/countryinfo/:name', () => {
-  it('handles internal server error (status 500)', async () => {
-    const mockResponse = {
-      json: jest.fn(),
-    };
-    fetch.mockResolvedValue(mockResponse);
+      const mockReturnObj = {
+        countryData: mockedCountryData[0],
+      };
 
-    mockResponse.json.mockRejectedValue(new Error('Some error'));
-
-    const req = { params: { name: 'example' } };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
-
-    await app.get('/api/countryinfo/:name', req, res);
-
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+      const response = await request(app).get(
+        `/api/countryinfo/${mockedCountry}`
+      );
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(mockReturnObj);
+    } catch (err) {
+      throw err;
+    }
   });
 });
-
-*/
