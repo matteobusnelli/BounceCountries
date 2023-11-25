@@ -1,6 +1,6 @@
 "use strict";
 const request = require("supertest");
-const app = require("../index");
+const { app, server } = require("../index");
 
 beforeAll(() => {
   jest.clearAllMocks();
@@ -8,8 +8,9 @@ beforeAll(() => {
   jest.spyOn(console, "info").mockImplementation(() => {});
   jest.spyOn(console, "error").mockImplementation(() => {});
 });
-afterAll(() => {
+afterAll((done) => {
   jest.restoreAllMocks();
+  server.close(done);
 });
 
 describe("Test GET /api/countryinfo/:name", () => {

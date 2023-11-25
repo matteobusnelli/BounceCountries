@@ -44,8 +44,8 @@ app.get("/api/countryinfo/:name", async (req, res) => {
 });
 
 // Activate the server
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
 
-module.exports = app;
+module.exports = { app, server };
