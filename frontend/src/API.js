@@ -1,5 +1,5 @@
 "use strict";
-const URL = "bounce-countries-backend.vercel.app/api";
+const URL = "https://bounce-countries-backend.vercel.app//api";
 
 function getJson(httpResponsePromise) {
   // server API always return JSON, in case of error the format is the following { error: <message> }
