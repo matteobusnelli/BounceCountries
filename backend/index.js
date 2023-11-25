@@ -9,7 +9,7 @@ const port = 3001;
 app.use(morgan("dev"));
 app.use(express.json());
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "https://bounce-countries-rose.vercel.app/",
   credentials: true,
 };
 app.use(cors(corsOptions));
