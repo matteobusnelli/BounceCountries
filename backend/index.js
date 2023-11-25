@@ -9,8 +9,7 @@ const port = 3001;
 app.use(morgan("dev"));
 app.use(express.json());
 const corsOptions = {
-  origin: "https://bounce-countries-rose.vercel.app/",
-  credentials: true,
+  origin: "https://bounce-countries-rose.vercel.app",
 };
 app.use(cors(corsOptions));
 
