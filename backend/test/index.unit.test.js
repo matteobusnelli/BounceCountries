@@ -48,113 +48,109 @@ describe("Test GET /api/countryinfo/:name", () => {
       .catch((err) => done(err));
   });
 
-  test("T3 successful response (country with borders) (STATUS 200)", async () => {
-    try {
-      mockedCountry = "italy";
-      const mockedCountryData = [
-        {
-          name: {
-            common: "Italy",
-            official: "Italian Republic",
-          },
-          borders: ["AUT", "FRA", "SMR", "SVN", "CHE", "VAT"],
+  test("T3 successful response (country with borders) (STATUS 200)", (done) => {
+    mockedCountry = "italy";
+    const mockedCountryData = [
+      {
+        name: {
+          common: "Italy",
+          official: "Italian Republic",
         },
-        {
-          otherCountryData: "other country data",
+        borders: ["AUT", "FRA", "SMR", "SVN", "CHE", "VAT"],
+      },
+      {
+        otherCountryData: "other country data",
+      },
+    ];
+    const mockedCountryBorders = [
+      {
+        name: {
+          common: "San Marino",
         },
-      ];
-      const mockedCountryBorders = [
-        {
-          name: {
-            common: "San Marino",
-          },
+      },
+      {
+        name: {
+          common: "France",
         },
-        {
-          name: {
-            common: "France",
-          },
+      },
+      {
+        name: {
+          common: "Vatican City",
         },
-        {
-          name: {
-            common: "Vatican City",
-          },
+      },
+      {
+        name: {
+          common: "Switzerland",
         },
-        {
-          name: {
-            common: "Switzerland",
-          },
+      },
+      {
+        name: {
+          common: "Austria",
         },
-        {
-          name: {
-            common: "Austria",
-          },
+      },
+      {
+        name: {
+          common: "Slovenia",
         },
-        {
-          name: {
-            common: "Slovenia",
-          },
-        },
-      ];
+      },
+    ];
 
-      jest
-        .spyOn(global, "fetch")
-        .mockResolvedValueOnce({
-          json: jest.fn().mockResolvedValue(mockedCountryData),
-          status: 200,
-        })
-        .mockResolvedValueOnce({
-          json: jest.fn().mockResolvedValue(mockedCountryBorders),
-          status: 200,
-        });
-
-      const mockReturnObj = {
-        countryData: mockedCountryData[0],
-        bordersNames: mockedCountryBorders.map(
-          (country) => country.name.common
-        ),
-      };
-
-      const response = await request(app).get(
-        `/api/countryinfo/${mockedCountry}`
-      );
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockReturnObj);
-    } catch (err) {
-      throw err;
-    }
-  });
-
-  test("T4 successful response (country without borders) (STATUS 200)", async () => {
-    try {
-      mockedCountry = "japan";
-      const mockedCountryData = [
-        {
-          name: {
-            common: "Japan",
-            official: "Japan",
-          },
-        },
-        {
-          otherCountryData: "other country data",
-        },
-      ];
-
-      jest.spyOn(global, "fetch").mockResolvedValueOnce({
+    jest
+      .spyOn(global, "fetch")
+      .mockResolvedValueOnce({
         json: jest.fn().mockResolvedValue(mockedCountryData),
+        status: 200,
+      })
+      .mockResolvedValueOnce({
+        json: jest.fn().mockResolvedValue(mockedCountryBorders),
         status: 200,
       });
 
-      const mockReturnObj = {
-        countryData: mockedCountryData[0],
-      };
+    const mockReturnObj = {
+      countryData: mockedCountryData[0],
+      bordersNames: mockedCountryBorders.map((country) => country.name.common),
+    };
 
-      const response = await request(app).get(
-        `/api/countryinfo/${mockedCountry}`
-      );
-      expect(response.status).toBe(200);
-      expect(response.body).toEqual(mockReturnObj);
-    } catch (err) {
-      throw err;
-    }
+    request(app)
+      .get(`/api/countryinfo/${mockedCountry}`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual(mockReturnObj);
+        done();
+      })
+      .catch((err) => done(err));
+  });
+
+  test("T4 successful response (country without borders) (STATUS 200)", (done) => {
+    mockedCountry = "japan";
+    const mockedCountryData = [
+      {
+        name: {
+          common: "Japan",
+          official: "Japan",
+        },
+      },
+      {
+        otherCountryData: "other country data",
+      },
+    ];
+
+    jest.spyOn(global, "fetch").mockResolvedValueOnce({
+      json: jest.fn().mockResolvedValue(mockedCountryData),
+      status: 200,
+    });
+
+    const mockReturnObj = {
+      countryData: mockedCountryData[0],
+    };
+
+    request(app)
+      .get(`/api/countryinfo/${mockedCountry}`)
+      .then((res) => {
+        expect(res.status).toBe(200);
+        expect(res.body).toEqual(mockReturnObj);
+        done();
+      })
+      .catch((err) => done(err));
   });
 });
