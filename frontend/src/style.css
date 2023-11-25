@@ -38,6 +38,7 @@
 
 .card-custom-image {
     border-radius: 10px;
+    border: 1px solid black;
 }
 
 .other-info-custom:hover {

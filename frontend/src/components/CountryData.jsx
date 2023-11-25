@@ -87,7 +87,7 @@ function CountryData({ countryInfo }) {
           <Row>
             <Col>
               <Button
-                className="buttom-custom-style text-decoration-underline"
+                className="buttom-custom-style"
                 onClick={() => setMoreInfo((oldValue) => !oldValue)}
               >
                 More Info
@@ -95,7 +95,7 @@ function CountryData({ countryInfo }) {
               {moreInfo && (
                 <Container className="mt-3">
                   <Row>
-                    <Col lg={4} sm={12} className="text-center">
+                    <Col lg={4} sm={12} className="text-center mt-3">
                       <Row>
                         <Col>
                           <strong>Extention:</strong>
@@ -108,7 +108,7 @@ function CountryData({ countryInfo }) {
                         </Col>
                       </Row>
                     </Col>
-                    <Col lg={4} sm={12} className="text-center">
+                    <Col lg={4} sm={12} className="text-center mt-3">
                       <Row>
                         <Col>
                           <strong>Other spellings:</strong>
@@ -120,7 +120,7 @@ function CountryData({ countryInfo }) {
                         </Col>
                       </Row>
                     </Col>
-                    <Col lg={4} sm={12} className="text-center">
+                    <Col lg={4} sm={12} className="text-center mt-3">
                       <Row>
                         <Col>
                           <strong>Timezone:</strong>
@@ -132,7 +132,7 @@ function CountryData({ countryInfo }) {
                     </Col>
                   </Row>
                   <Row className="mt-3">
-                    <Col className="text-center">
+                    <Col className="text-center mt-3">
                       <a
                         href={countryInfo.countryData.maps.googleMaps}
                         target="_blank"
