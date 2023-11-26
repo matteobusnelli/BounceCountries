@@ -2,6 +2,9 @@
 
 ## Busnelli Matteo
 
+## Vercel endpoint
+- https://bounce-countries-rose.vercel.app/
+
 ## Environment set up, start and use application
 
 ### Getting Started
